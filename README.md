@@ -1,3 +1,3 @@
 # KarenAndEric.com
 
-This is the source code for the website karenanderic.com.
+The source code for the [karenanderic.com](karenanderic.com) wedding website.
