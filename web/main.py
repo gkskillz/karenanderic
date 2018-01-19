@@ -25,7 +25,12 @@ app = webapp2.WSGIApplication(
         ('/(event|rsvp)?', static_handler.StaticHandler),
     ],
     config={
-        'webapp2_extras.sessions': {'secret_key': common.session_key()},
+        'webapp2_extras.sessions': {
+            'secret_key': common.session_key(),
+            'cookie_args': {
+                'max_age': 366 * 24 * 60 * 60,  # 1 Year
+            },
+        },
     }
 )
 app.error_handlers[404] = handle_404
