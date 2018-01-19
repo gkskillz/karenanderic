@@ -1,12 +1,18 @@
 import jinja2
 import webapp2
 
+from app import base_handler
 from app import common
 
 
-class StaticHandler(webapp2.RequestHandler):
-    def get(self, path='home'):
+class StaticHandler(base_handler.BaseHandler):
+    """A handler which serves mostly static content from the template file.
+
+    The paths configured in the app should match the files in the base
+    template directory.
+    """
+    def get(self, path=None):
         if not path:
             path = 'home'
         template = common.JINJA_ENV.get_template('%s.html' % path)
-        self.response.out.write(template.render(common.base_context(path=path)))
+        self.response.out.write(template.render(self.base_context(path=path)))

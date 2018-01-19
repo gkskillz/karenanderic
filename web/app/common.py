@@ -1,25 +1,25 @@
 import os
 import jinja2
 
+
+def _filename(f):
+    """Return the filename relative to `common.py`."""
+    return os.path.join(os.path.dirname(__file__), f)
+
+
+SESSION_KEY_FILE = '../session_key.txt'
 TEMPLATE_DIR = 'template'
+
 JINJA_ENV = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(
-        os.path.join(os.path.dirname(__file__), TEMPLATE_DIR)),
+    loader=jinja2.FileSystemLoader(_filename(TEMPLATE_DIR)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True,
     trim_blocks=True,
 )
 
 
-def base_context(path=None):
-    return {'navbar': _navbar_context(path)}
+def session_key():
+    """Returns the session key."""
+    with open(_filename(SESSION_KEY_FILE), 'r') as f:
+        return f.readline().strip()
 
-
-def _navbar_context(path):
-    return {
-        'links': [
-            {'href': '/', 'label': 'Home', 'active': path == 'home'},
-            {'href': '/event', 'label': 'Event', 'active': path == 'event'},
-            {'href': '/rsvp', 'label': 'RSVP', 'active': path == 'rsvp'},
-        ],
-    }

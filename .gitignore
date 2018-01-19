@@ -1,3 +1,8 @@
+# The session key is a secret and should not be included in the repo
+web/session_key.txt
+
+# Skip IDE files
 .idea/
 
+# Skip compiled python files
 *.pyc
