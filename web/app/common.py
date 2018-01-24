@@ -22,4 +22,3 @@ def session_key():
     """Returns the session key."""
     with open(_filename(SESSION_KEY_FILE), 'r') as f:
         return f.readline().strip()
-

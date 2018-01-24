@@ -1,6 +1,3 @@
-import jinja2
-import webapp2
-
 from app import base_handler
 from app import common
 

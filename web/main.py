@@ -3,26 +3,29 @@ import webapp2
 
 from app import base_handler
 from app import common
+from app import login_handler
 from app import static_handler
 
 
 def handle_404(_, response, exception):
     logging.exception(exception)
     template = common.JINJA_ENV.get_template('404.html')
-    response.out.write(template.render(base_handler.BaseHandler.base_context()))
+    response.out.write(template.render(base_handler.base_context()))
     response.set_status(404)
 
 
 def handle_500(_, response, exception):
     logging.exception(exception)
     template = common.JINJA_ENV.get_template('500.html')
-    response.out.write(template.render(base_handler.BaseHandler.base_context()))
+    response.out.write(template.render(base_handler.base_context()))
     response.set_status(500)
 
 
 app = webapp2.WSGIApplication(
     [
         ('/(event|rsvp)?', static_handler.StaticHandler),
+        ('/login', login_handler.LoginHandler),
+        ('/logout', login_handler.LogoutHandler),
     ],
     config={
         'webapp2_extras.sessions': {

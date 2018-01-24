@@ -21,5 +21,12 @@
       </li>
       {% endfor %}
     </ul>
+    {% if logged_in %}
+    <ul class="navbar-nav">
+      <li class="navbar-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+    {% endif %}
   </div>
 </nav>

@@ -1,0 +1,52 @@
+{% extends "common/base.html" %}
+
+{% block navbar %}{% include "common/navbar.html" %}{% endblock %}
+
+{% block content %}<div class="row">
+  <div class="col"></div>
+  <div class="col-8">
+    <div class="card m-3">
+      <div class="card-header">Login</div>
+      <div class="card-body">
+        <p>
+          Please enter the 5 digit code you received from the invite.
+        </p>
+        <form class="needs-validation" novalidate action="/login" method="post">
+          <div class="form-group">
+            <input
+                type="text"
+                id="invitation-code"
+                class="form-control {% if invitation_code_err %} is-invalid{% endif %}"
+                name="invitation_code"
+                placeholder="Invitation code"
+                required>
+            <div class="invalid-feedback">
+              {{ invitation_code_err or "Please provide an invitation code" }}
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}
