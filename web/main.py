@@ -4,6 +4,7 @@ import webapp2
 from app import base_handler
 from app import common
 from app import login_handler
+from app import populate_handler
 from app import static_handler
 
 
@@ -26,6 +27,7 @@ app = webapp2.WSGIApplication(
         ('/(event|rsvp)?', static_handler.StaticHandler),
         ('/login', login_handler.LoginHandler),
         ('/logout', login_handler.LogoutHandler),
+        ('/populate', populate_handler.PopulateHandler),
     ],
     config={
         'webapp2_extras.sessions': {
