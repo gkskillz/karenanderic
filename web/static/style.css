@@ -1,12 +1,12 @@
+h1, h2, h3, h4,
 .navbar-brand,
-h1, h2, h3, h4 {
+.signature {
   font-family: Pacifico,cursive;
 }
 
 .banner {
   align-items: center;
   display: flex;
-  height: 200px;
   background-position: center;
 }
 
@@ -14,11 +14,17 @@ h1, h2, h3, h4 {
   text-shadow: 2px 2px 8px #000;
 }
 
-.thumbnail {
-  height: 200px;
-  width: 200px;
+.banner.home {
+  background-image: url('/static/images/home_banner.jpg');
+  height: 600px;
 }
 
-.placeholder {
-  background-color: #999;
+.banner.event {
+  background-image: url('/static/images/event_banner.jpg');
+  height: 200px;
+}
+
+.banner.rsvp {
+  background-image: url('/static/images/rsvp_banner.jpg');
+  height: 200px;
 }
