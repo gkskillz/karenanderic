@@ -30,6 +30,12 @@ class Location(ndb.Model):
     has_plus_one = ndb.BooleanProperty()
     additional_child_count = ndb.IntegerProperty()
 
+    @classmethod
+    def query_invitation(cls, invtitation):
+        if not invtitation:
+            return []
+        return cls.query(ancestor=invtitation.key).fetch()
+
 
 # Choices for the RSVP.
 YES_RSVP = 1

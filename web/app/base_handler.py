@@ -63,8 +63,19 @@ class BaseHandler(webapp2.RequestHandler):
     def base_context(self, path=None):
         """Returns the base context for things like the navigation bar."""
         context = base_context(path)
+        locations = set()
         if self.logged_in():
             context['logged_in'] = self.logged_in()
+
+            for location in models.Location.query_invitation(self.invitation):
+                locations.add(location.location)
+
+        context['locations'] = locations
+        context['is_ca'] = models.CA_LOCATION in locations
+        context['is_ca_tea'] = models.CA_TEA_LOCATION in locations
+        context['is_hk'] = models.HK_LOCATION in locations
+        context['is_hk_tea'] = models.HK_TEA_LOCATION in locations
+
         return context
 
     def logged_in(self):
