@@ -30,3 +30,9 @@ The app can be deployed to app engine with the `gcloud` App Engine command. Run:
 ```sh
 gcloud app deploy web
 ```
+
+## Credits & Attributions
+
+### Images
+
+*   [`app/web/static/images/event_banner.jpg`](https://pxhere.com/en/photo/489871)

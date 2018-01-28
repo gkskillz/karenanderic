@@ -5,18 +5,20 @@ h1, h2, h3, h4 {
 
 .banner {
   align-items: center;
-  background-color: #999;
   display: flex;
   height: 200px;
+  background-position: center;
 }
 
 .banner h1 {
   text-shadow: 2px 2px 8px #000;
 }
 
-.thumbnail-placeholder {
-  background-color: #999;
+.thumbnail {
   height: 200px;
   width: 200px;
 }
 
+.placeholder {
+  background-color: #999;
+}
