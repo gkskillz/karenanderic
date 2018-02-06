@@ -8,4 +8,84 @@
     <h1 class="display-4 text-white">RSVP</h1>
   </div>
 </div>
+{% if ca_rsvp %}
+<div class="row">
+  <div class="col-lg-6 my-4">
+    <form class="needs-validation" novalidat action="/rsvp" method="post">
+      <input type="hidden" name="location" value="ca" />
+      <div class="mb-3">
+        Please let us know if you can attend our wedding at 5:00 PM, August 4th,
+        2018.
+      </div>
+      {% for guest_rsvp in ca_rsvp.adult_rsvps() %}
+        {% set prefix = "adult_%d" % loop.index %}
+        {% include "guest_rsvp.html" %}
+      {% endfor %}
+
+      {% if ca_rsvp.plus_one_rsvp() %}
+        <div class="mb-3">
+          <label class="font-weight-bold" for="plus_one_name">Will a plus one be attending?</label>
+          <input class="form-control" type="text" id="plus_one_name" name="plus_one_name" value="{{ ca_rsvp.plus_one_rsvp().name }}" placeholder="Name" />
+        </div>
+      {% endif %}
+
+      {% if ca_rsvp.child_rsvps() or ca_rsvp.additional_child_rsvps() %}
+        <div class="mb-3">
+          <p class="font-weight-bold">Will any children be attending?</p>
+
+          {% for guest_rsvp in ca_rsvp.child_rsvps() %}
+            {% set prefix = "child_%d" % loop.index %}
+            {% include "guest_rsvp.html" %}
+          {% endfor %}
+
+          {% for guest_rsvp in ca_rsvp.additional_child_rsvps() %}
+            <div class="mb-1">
+              <input class="form-control" type="text" name="additional_child_{{ loop.index }}_name" value="{{ guest_rsvp.name }}" placeholder="Name" />
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="mb-3">
+        <label class="font-weight-bold">What is the best mailing address to reach you at?</label>
+        <textarea class="form-control" name="mailing_address" rows="3" placeholder="Mailing address" required>{{ ca_rsvp.mailing_address }}</textarea>
+      </div>
+
+      {% set question = "Are you interested in taking a shuttle from Windsor or Healdsburg? This will help us estimate demand." %}
+      {% set id_prefix = "shuttle" %}
+      {% set key = "%s_rsvp" % id_prefix %}
+      {% set yes_label = "Yes, I am interested on taking the shuttle" %}
+      {% set no_label = "No, I am not interested" %}
+      {% set yes_checked = ca_rsvp.is_shuttle_yes() %}
+      {% set no_checked = ca_rsvp.is_shuttle_no() %}
+      {% include "yes_no_rsvp.html" %}
+
+      <div class="mb-3">
+        <label class="font-weight-bold" for="comments">Any additional comments?</label>
+        <textarea class="form-control" id="comments" name="comments" rows="3" placeholder="Comments">{{ ca_rsvp.comments }}</textarea>
+      </div>
+
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
 {% endblock %}

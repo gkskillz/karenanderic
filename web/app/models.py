@@ -15,6 +15,18 @@ class Guest(ndb.Model):
     email = ndb.StringProperty()
     is_child = ndb.BooleanProperty()
 
+    def full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
+
+    @classmethod
+    def query_invitation(cls, invitation):
+        """Returns the list of guests ordered by name."""
+        if not invitation:
+            return []
+        q = cls.query(ancestor=invitation.key)
+        q = q.order(Guest.first_name, Guest.last_name)
+        return q.fetch()
+
 
 # Choices for the locations. Guests can RSVP for CA_LOCATION and HK_LOCATION,
 # but the tea ceremony locations are just to show the information about the
@@ -31,10 +43,13 @@ class Location(ndb.Model):
     additional_child_count = ndb.IntegerProperty()
 
     @classmethod
-    def query_invitation(cls, invtitation):
-        if not invtitation:
-            return []
-        return cls.query(ancestor=invtitation.key).fetch()
+    def query_invitation(cls, invitation):
+        if not invitation:
+            return {}
+        locations = {}
+        for location in cls.query(ancestor=invitation.key).fetch():
+            locations[location.location] = location
+        return locations
 
 
 # Choices for the RSVP.
@@ -50,11 +65,91 @@ CHILD_MEAL = 4
 MEAL_CHOICES = [MEAT_MEAL, FISH_MEAL, VEGGIE_MEAL, CHILD_MEAL]
 
 
-class Rsvp(ndb.Model):
-    location = ndb.IntegerProperty()
-    first_name = ndb.StringProperty()
-    last_name = ndb.StringProperty()
+class GuestRsvp(ndb.Model):
+    name = ndb.StringProperty(default='')
+    is_child = ndb.BooleanProperty(default=False)
+    is_extra = ndb.BooleanProperty(default=False)
     rsvp = ndb.IntegerProperty()
     meal_choice = ndb.IntegerProperty()
     meal_comments = ndb.StringProperty()
+
+    def is_yes(self):
+        return self.rsvp == YES_RSVP
+
+    def is_no(self):
+        return self.rsvp == NO_RSVP
+
+
+class Rsvp(ndb.Model):
+    location = ndb.IntegerProperty()
+    guest_rsvps = ndb.StructuredProperty(GuestRsvp, repeated=True)
+    mailing_address = ndb.StringProperty(default='')
+    shuttle_rsvp = ndb.IntegerProperty()
+    comments = ndb.StringProperty(default='')
     timestamp = ndb.DateTimeProperty(auto_now_add=True)
+
+    def adult_rsvps(self):
+        rsvps = []
+        for rsvp in self.guest_rsvps:
+            if not rsvp.is_extra and not rsvp.is_child:
+                rsvps.append(rsvp)
+        return rsvps
+
+    def child_rsvps(self):
+        rsvps = []
+        for rsvp in self.guest_rsvps:
+            if not rsvp.is_extra and rsvp.is_child:
+                rsvps.append(rsvp)
+        return rsvps
+
+    def plus_one_rsvp(self):
+        for rsvp in self.guest_rsvps:
+            if rsvp.is_extra and not rsvp.is_child:
+                return rsvp
+        return None
+
+    def additional_child_rsvps(self):
+        rsvps = []
+        for rsvp in self.guest_rsvps:
+            if rsvp.is_extra and rsvp.is_child:
+                rsvps.append(rsvp)
+        return rsvps
+
+    def add_empty_extras(self, location):
+        if not self.plus_one_rsvp() and location.has_plus_one:
+            self.guest_rsvps.append(GuestRsvp(
+                name='',
+                is_child=False,
+                is_extra=True,
+            ))
+
+        additional_child_count = (
+                location.additional_child_count -
+                len(self.additional_child_rsvps()))
+        for _ in range(additional_child_count):
+            self.guest_rsvps.append(GuestRsvp(
+                name='',
+                is_child=True,
+                is_extra=True,
+            ))
+
+    def is_shuttle_yes(self):
+        return self.shuttle_rsvp == YES_RSVP
+
+    def is_shuttle_no(self):
+        return self.shuttle_rsvp == NO_RSVP
+
+    @classmethod
+    def empty(cls, invitation, location, guests):
+        rsvp = cls(
+            parent=invitation.key,
+            location=location.location,
+        )
+        for guest in guests:
+            rsvp.guest_rsvps.append(GuestRsvp(
+                name=guest.full_name(),
+                is_child=guest.is_child,
+                is_extra=False,
+            ))
+        rsvp.add_empty_extras(location)
+        return rsvp

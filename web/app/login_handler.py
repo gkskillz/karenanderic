@@ -23,12 +23,12 @@ class LoginHandler(base_handler.BaseHandler):
         template = common.JINJA_ENV.get_template('login.html')
         context = self.base_context()
 
-        if self.invitation_code and not self.invitation:
-            self.redirect('/logout')
-
         if INVITATION_CODE_ERR in self.session:
             context['invitation_code_err'] = self.session.pop(
                     INVITATION_CODE_ERR)
+        elif self.invitation_code and not self.invitation:
+            self.redirect('/logout')
+            return
 
         self.response.out.write(template.render(context))
 
@@ -38,11 +38,13 @@ class LoginHandler(base_handler.BaseHandler):
             self.session[INVITATION_CODE_ERR] = (
                     'Please provide an invitation code')
             self.redirect('/login')
+            return
 
         if not models.Invitation.query_code(invitation_code):
             self.session[INVITATION_CODE_ERR] = (
                     'The invitation "%s" was not found' % invitation_code)
             self.redirect('/login')
+            return
 
         self.session[base_handler.INVITATION_CODE] = invitation_code
         self.redirect('/login')

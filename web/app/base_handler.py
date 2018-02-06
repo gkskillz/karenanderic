@@ -42,6 +42,7 @@ class BaseHandler(webapp2.RequestHandler):
         if self.is_restricted() and not self.logged_in():
             self.session[REDIRECT_PATH] = self.request.path_qs
             self.redirect('/login')
+            return
 
         try:
             webapp2.RequestHandler.dispatch(self)
@@ -60,15 +61,35 @@ class BaseHandler(webapp2.RequestHandler):
             return None
         return models.Invitation.query_code(self.invitation_code)
 
+    @webapp2.cached_property
+    def locations(self):
+        """Returns the location models if the user is logged in."""
+        if not self.logged_in():
+            return []
+        return models.Location.query_invitation(self.invitation)
+
+    @webapp2.cached_property
+    def guests(self):
+        """Returns the guest models if the user is logged in."""
+        if not self.logged_in():
+            return []
+        return models.Guest.query_invitation(self.invitation)
+
+    def adult_guests(self):
+        """Returns the guest models filter by not is_child."""
+        return [g for g in self.guests if not g.is_child]
+
+    def child_guests(self):
+        """Returns the guest models filter by is_child."""
+        return [g for g in self.guests if g.is_child]
+
     def base_context(self, path=None):
         """Returns the base context for things like the navigation bar."""
         context = base_context(path)
         locations = set()
         if self.logged_in():
             context['logged_in'] = self.logged_in()
-
-            for location in models.Location.query_invitation(self.invitation):
-                locations.add(location.location)
+            locations |= set(self.locations.keys())
 
         context['locations'] = locations
         context['is_ca'] = models.CA_LOCATION in locations
