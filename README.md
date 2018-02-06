@@ -25,7 +25,15 @@ App Engine command. Run:
 
 ## Deployment
 
-The app can be deployed to app engine with the `gcloud` App Engine command. Run:
+The app can be deployed to app engine with the `gcloud` App Engine command.
+
+If there are new indexes which need to be generated, run:
+
+```sh
+gcloud datastore create-indexes web/index.yaml
+```
+
+To deploy the app to App Engine, run:
 
 ```sh
 gcloud app deploy web
