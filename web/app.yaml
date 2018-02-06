@@ -12,10 +12,11 @@ handlers:
   secure: always
 
 libraries:
-- name: django
-  version: "1.11"
 - name: jinja2
   version: "2.6"
 
 skip_files:
 - ^(.*/)?.*\.xcf$
+
+builtins:
+- remote_api: on
