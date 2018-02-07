@@ -34,6 +34,10 @@ class LoginHandler(base_handler.BaseHandler):
 
     def post(self):
         invitation_code = self.request.get(base_handler.INVITATION_CODE)
+
+        # Store an attempt to log in.
+        models.LoginAttempt(code=invitation_code).put()
+
         if not invitation_code:
             self.session[INVITATION_CODE_ERR] = (
                     'Please provide an invitation code')

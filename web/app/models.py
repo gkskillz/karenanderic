@@ -52,6 +52,11 @@ class Location(ndb.Model):
         return locations
 
 
+class LoginAttempt(ndb.Model):
+    code = ndb.StringProperty()
+    timestamp = ndb.DateTimeProperty(auto_now_add=True)
+
+
 # Choices for the RSVP.
 YES_RSVP = 1
 NO_RSVP = 2
