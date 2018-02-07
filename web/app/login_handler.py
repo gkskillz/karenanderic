@@ -33,7 +33,8 @@ class LoginHandler(base_handler.BaseHandler):
         self.response.out.write(template.render(context))
 
     def post(self):
-        invitation_code = self.request.get(base_handler.INVITATION_CODE)
+        invitation_code = self.request.POST.get(base_handler.INVITATION_CODE)
+        invitation_code = (invitation_code or '').lower()
 
         # Store an attempt to log in.
         models.LoginAttempt(code=invitation_code).put()
