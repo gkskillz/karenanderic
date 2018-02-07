@@ -52,7 +52,7 @@ From the admin page, upload the data store by creating the files
 `guest_list.csv` and `location_list.csv` and uploading them via the populate
 page.
 
-Example `web/guest_list.csv`:
+Example `guest_list.csv`:
 
 ```csv
 invitation_code,first_name,last_name,email,is_child
@@ -73,7 +73,7 @@ bothfriend,First,Last,email@example.com,0
 bothfamily,First,Last,email@example.com,0
 ```
 
-Example `web/location_list.csv`:
+Example `location_list.csv`:
 
 ```csv
 invitation_code,location,has_plus_one,additional_child_count
