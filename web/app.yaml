@@ -7,6 +7,10 @@ handlers:
   static_dir: static
   secure: always
 
+- url: /admin(/.*)?
+  script: main.app
+  login: admin
+
 - url: .*  # This regex directs all routes to main.app
   script: main.app
   secure: always

@@ -1,0 +1,16 @@
+{% extends "common/base.html" %}
+
+{% block navbar %}{% include "common/navbar.html" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col my-3">
+    <h1 class="mb-3">Admin Tasks</h1>
+    <ul>
+      <li><a href="/admin/populate">Populate Datastore</a></li>
+      <li>Send emails (Coming soon!)</li>
+      <li>Download RSVPs (Coming soon!)</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

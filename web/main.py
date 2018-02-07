@@ -4,7 +4,7 @@ import webapp2
 from app import base_handler
 from app import common
 from app import login_handler
-from app import populate_handler
+from app import admin_handler
 from app import rsvp_handler
 from app import static_handler
 
@@ -25,11 +25,15 @@ def handle_500(_, response, exception):
 
 app = webapp2.WSGIApplication(
     [
+        # Main site paths
         ('/(event)?', static_handler.StaticHandler),
         ('/login', login_handler.LoginHandler),
         ('/logout', login_handler.LogoutHandler),
-        ('/populate', populate_handler.PopulateHandler),
         ('/rsvp', rsvp_handler.RsvpHandler),
+
+        # Admin paths
+        ('/admin', admin_handler.AdminHandler),
+        ('/admin/populate', admin_handler.PopulateHandler),
     ],
     config={
         'webapp2_extras.sessions': {
