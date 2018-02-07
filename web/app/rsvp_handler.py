@@ -31,8 +31,6 @@ class RsvpHandler(base_handler.BaseHandler):
         self.response.out.write(template.render(context))
 
     def post(self):
-        print self.request.POST
-
         location = self._location(self.request.POST.get('location'))
         if not location:
             self.response.out.write('Location not allowed')

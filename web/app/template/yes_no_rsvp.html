@@ -1,13 +1,17 @@
 <div class="mb-3">
   <p class="mb-2 font-weight-bold">{{ question }}</p>
   <div class="form-check">
-    <input class="form-check-input" type="radio" id="{{ id_prefix }}_yes" name="{{ key }}" value="yes" {% if yes_checked %}checked{% endif %} required/>
+    <input class="form-check-input" type="radio" id="{{ id_prefix }}_yes" name="{{ key }}" value="yes"
+           {% if yes_checked %}checked{% endif %}
+           {% if required %}required{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_yes">
       {{ yes_label }}
     </label>
   </div>
   <div class="form-check">
-    <input class="form-check-input" type="radio" id="{{ id_prefix }}_no" name="{{ key }}" value="no" {% if no_checked %}checked{% endif %} required/>
+    <input class="form-check-input" type="radio" id="{{ id_prefix }}_no" name="{{ key }}" value="no"
+           {% if no_checked %}checked{% endif %}
+           {% if required %}required{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_no">
       {{ no_label }}
     </label>

@@ -9,9 +9,23 @@
   </div>
 </div>
 {% if ca_rsvp %}
+{% if ca_rsvp.timestamp %}
 <div class="row">
-  <div class="col-lg-6 my-4">
-    <form class="needs-validation" novalidat action="/rsvp" method="post">
+  <div class="col-lg-8 mt-4">
+    <div class="card light-green">
+      <div class="card-body">
+        <p class="card-text">
+          Thank you for your response! If you need to make any
+          changes, please resubmit the form.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  <div class="col-lg-8 my-4">
+    <form class="needs-validation" novalidate action="/rsvp" method="post">
       <input type="hidden" name="location" value="ca" />
       <div class="mb-3">
         Please let us know if you can attend our wedding at 5:00 PM, August 4th,
@@ -48,16 +62,19 @@
 
       <div class="mb-3">
         <label class="font-weight-bold">What is the best mailing address to reach you at?</label>
-        <textarea class="form-control" name="mailing_address" rows="3" placeholder="Mailing address" required>{{ ca_rsvp.mailing_address }}</textarea>
+        <textarea class="form-control" name="mailing_address" rows="3" placeholder="Mailing address">{{ ca_rsvp.mailing_address }}</textarea>
       </div>
 
-      {% set question = "Are you interested in taking a shuttle from Windsor or Healdsburg? This will help us estimate demand." %}
+      {% set question = "
+      Are you interested in taking a shuttle from Windsor or Healdsburg? This
+      is not a commitment but will help us estimate demand." %}
       {% set id_prefix = "shuttle" %}
       {% set key = "%s_rsvp" % id_prefix %}
-      {% set yes_label = "Yes, I am interested on taking the shuttle" %}
+      {% set yes_label = "Yes, I am interested in taking the shuttle" %}
       {% set no_label = "No, I am not interested" %}
       {% set yes_checked = ca_rsvp.is_shuttle_yes() %}
       {% set no_checked = ca_rsvp.is_shuttle_no() %}
+      {% set required = False %}
       {% include "yes_no_rsvp.html" %}
 
       <div class="mb-3">

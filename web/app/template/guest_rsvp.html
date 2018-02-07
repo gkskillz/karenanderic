@@ -6,5 +6,6 @@
 {% set no_label = "Decline with regret" %}
 {% set yes_checked = guest_rsvp.is_yes() %}
 {% set no_checked = guest_rsvp.is_no() %}
+{% set required = True %}
 {% include "yes_no_rsvp.html" %}
 
