@@ -103,7 +103,7 @@ bothfamily,hk_tc,0,0
 *   [`app/web/static/favicon.ico`](https://www.freefavicon.com/freefavicons/people/iconinfo/wedding-couple-152-182970.html)
 *   [`app/web/static/images/event_banner.jpg`](https://pxhere.com/en/photo/489871)
 *   Photo Credit [Michael Mak](http://www.michaelmak.co/)
-    *   `app/web/static/images/home_banner.jpg`:
+    *   `app/web/static/images/home_banner.jpg`
     *   `app/web/static/images/save_the_date_email.jpg`
 
 ### Tools
