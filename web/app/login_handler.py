@@ -20,6 +20,11 @@ class LoginHandler(base_handler.BaseHandler):
             self.redirect(self.session.get(base_handler.REDIRECT_PATH) or '/')
             return
 
+        invitation_code = self.request.GET.get(base_handler.INVITATION_CODE)
+        if invitation_code:
+            self._submit(invitation_code)
+            return
+
         template = common.JINJA_ENV.get_template('login.html')
         context = self.base_context()
 
@@ -34,6 +39,9 @@ class LoginHandler(base_handler.BaseHandler):
 
     def post(self):
         invitation_code = self.request.POST.get(base_handler.INVITATION_CODE)
+        self._submit(invitation_code)
+
+    def _submit(self, invitation_code):
         invitation_code = (invitation_code or '').lower()
 
         # Store an attempt to log in.
