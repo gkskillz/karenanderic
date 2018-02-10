@@ -20,7 +20,5 @@ libraries:
   version: "2.6"
 
 skip_files:
+- ^(.*/)?.*\.pyc$
 - ^(.*/)?.*\.xcf$
-
-builtins:
-- remote_api: on
