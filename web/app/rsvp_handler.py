@@ -21,7 +21,6 @@ class RsvpHandler(base_handler.BaseHandler):
                 ancestor=self.invitation.key,
             ).order(-models.Rsvp.timestamp).get()
             if not rsvp:
-                print 'no existing rsvp'
                 rsvp = models.Rsvp.empty(self.invitation, location, self.guests)
             else:
                 rsvp.add_empty_extras(location)
