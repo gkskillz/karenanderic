@@ -17,6 +17,7 @@ def base_context(path=None):
                 link('/', 'Home', 'home'),
                 link('/event', 'Event', 'event'),
                 link('/photos', 'Photos', 'photos'),
+                link('/registry', 'Registry', 'registry'),
                 link('/rsvp', 'RSVP', 'rsvp'),
             ],
         },
