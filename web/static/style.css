@@ -32,3 +32,13 @@ h1, h2, h3, h4,
 .light-green {
   background-color: #c8e6c9;
 }
+
+.album {
+  max-width: 840px;
+  text-align: center;
+}
+
+.carousel-item {
+  background: #212121;
+  max-height: 720px;
+}

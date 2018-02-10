@@ -26,7 +26,7 @@ def handle_500(_, response, exception):
 app = webapp2.WSGIApplication(
     [
         # Main site paths
-        ('/(event)?', static_handler.StaticHandler),
+        ('/(event|photos)?', static_handler.StaticHandler),
         ('/login', login_handler.LoginHandler),
         ('/logout', login_handler.LogoutHandler),
         ('/rsvp', rsvp_handler.RsvpHandler),

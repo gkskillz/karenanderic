@@ -8,12 +8,16 @@ REDIRECT_PATH = 'redirect_path'
 
 
 def base_context(path=None):
+    def link(href, label, active_path):
+        return {'href': href, 'label': label, 'active': path == active_path}
+
     return {
         'navbar': {
             'links': [
-                {'href': '/', 'label': 'Home', 'active': path == 'home'},
-                {'href': '/event', 'label': 'Event', 'active': path == 'event'},
-                {'href': '/rsvp', 'label': 'RSVP', 'active': path == 'rsvp'},
+                link('/', 'Home', 'home'),
+                link('/event', 'Event', 'event'),
+                link('/photos', 'Photos', 'photos'),
+                link('/rsvp', 'RSVP', 'rsvp'),
             ],
         },
     }
