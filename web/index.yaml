@@ -16,6 +16,13 @@ indexes:
   - name: first_name
   - name: last_name
 
+- kind: Guest
+  ancestor: yes
+  properties:
+  - name: is_child
+  - name: first_name
+  - name: last_name
+
 - kind: Rsvp
   ancestor: yes
   properties:

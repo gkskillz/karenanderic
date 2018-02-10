@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+
+{% block navbar %}{% include "common/navbar.html" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col my-3">
+    <h1 class="mb-3">Populate Guestlist</h1>
+    <form action="/admin/email" method="post">
+      <div class="mb-3">
+        <label for="invitation_codes">
+          Invitation codes (comma separated or line separated)
+        </label>
+        <textarea class="form-control" id="invitation_codes" name="invitation_codes" rows="10"></textarea>
+      </div>
+      <button class="btn btn-primary mb-3" type="submit">Email</button>
+    </form>
+    {% if status_message %}
+    <pre>{{ status_message }}</pre>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

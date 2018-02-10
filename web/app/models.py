@@ -19,11 +19,13 @@ class Guest(ndb.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
     @classmethod
-    def query_invitation(cls, invitation):
+    def query_invitation(cls, invitation, is_child=None):
         """Returns the list of guests ordered by name."""
         if not invitation:
             return []
         q = cls.query(ancestor=invitation.key)
+        if is_child is not None:
+            q = q.filter(Guest.is_child == is_child)
         q = q.order(Guest.first_name, Guest.last_name)
         return q.fetch()
 

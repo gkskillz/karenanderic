@@ -33,6 +33,7 @@ app = webapp2.WSGIApplication(
 
         # Admin paths
         ('/admin', admin_handler.AdminHandler),
+        ('/admin/email', admin_handler.EmailHandler),
         ('/admin/populate', admin_handler.PopulateHandler),
     ],
     config={
