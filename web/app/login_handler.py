@@ -22,7 +22,7 @@ class LoginHandler(base_handler.BaseHandler):
 
         invitation_code = self.request.GET.get(base_handler.INVITATION_CODE)
         if invitation_code:
-            self._submit(invitation_code)
+            self._submit(invitation_code, method="get")
             return
 
         template = common.JINJA_ENV.get_template('login.html')
@@ -39,28 +39,36 @@ class LoginHandler(base_handler.BaseHandler):
 
     def post(self):
         invitation_code = self.request.POST.get(base_handler.INVITATION_CODE)
-        self._submit(invitation_code)
+        self._submit(invitation_code, method="post")
 
-    def _submit(self, invitation_code):
+    def _submit(self, invitation_code, method=None):
         invitation_code = (invitation_code or '').lower()
 
         # Store an attempt to log in.
-        models.LoginAttempt(code=invitation_code).put()
+        attempt = models.LoginAttempt(
+            code=invitation_code,
+            method=method,
+            success=False,
+        )
 
-        if not invitation_code:
-            self.session[INVITATION_CODE_ERR] = (
-                    'Please provide an invitation code')
+        try:
+            if not invitation_code:
+                self.session[INVITATION_CODE_ERR] = (
+                        'Please provide an invitation code')
+                self.redirect('/login')
+                return
+
+            if not models.Invitation.query_code(invitation_code):
+                self.session[INVITATION_CODE_ERR] = (
+                        'The invitation "%s" was not found' % invitation_code)
+                self.redirect('/login')
+                return
+
+            attempt.success = True
+            self.session[base_handler.INVITATION_CODE] = invitation_code
             self.redirect('/login')
-            return
-
-        if not models.Invitation.query_code(invitation_code):
-            self.session[INVITATION_CODE_ERR] = (
-                    'The invitation "%s" was not found' % invitation_code)
-            self.redirect('/login')
-            return
-
-        self.session[base_handler.INVITATION_CODE] = invitation_code
-        self.redirect('/login')
+        finally:
+            attempt.put()
 
     @staticmethod
     def is_restricted():

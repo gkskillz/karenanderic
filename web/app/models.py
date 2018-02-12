@@ -56,6 +56,8 @@ class Location(ndb.Model):
 
 class LoginAttempt(ndb.Model):
     code = ndb.StringProperty()
+    success = ndb.BooleanProperty(default=False)
+    method = ndb.StringProperty()
     timestamp = ndb.DateTimeProperty(auto_now_add=True)
 
 
