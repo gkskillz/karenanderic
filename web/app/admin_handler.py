@@ -128,19 +128,19 @@ LOCATION_MAP = {
 }
 GUEST_LIST_ERR = 'guest_list_err'
 LOCATION_LIST_ERR = 'location_list_err'
-WANT_GUEST_LIST_FIELDS = [
+WANT_GUEST_LIST_FIELDS = set([
     'invitation_code',
     'first_name',
     'last_name',
     'email',
     'is_child',
-]
-WANT_LOCATION_LIST_FIELDS = [
+])
+WANT_LOCATION_LIST_FIELDS = set([
     'invitation_code',
     'location',
     'has_plus_one',
     'additional_child_count',
-]
+])
 
 
 class PopulateHandler(BaseAdminHandler):
@@ -173,7 +173,8 @@ class PopulateHandler(BaseAdminHandler):
             return
 
         guest_reader = csv.DictReader(guest_file.file)
-        if guest_reader.fieldnames != WANT_GUEST_LIST_FIELDS:
+        got_guest_fields = set(guest_reader.fieldnames)
+        if not WANT_GUEST_LIST_FIELDS.issubset(got_guest_fields):
             self.session[GUEST_LIST_ERR] = (
                 'guest_list.csv should have the fields %s' % ', '.join(
                         WANT_GUEST_LIST_FIELDS ))
@@ -181,7 +182,8 @@ class PopulateHandler(BaseAdminHandler):
             return
 
         location_reader = csv.DictReader(location_file.file)
-        if location_reader.fieldnames != WANT_LOCATION_LIST_FIELDS:
+        got_location_fields = set(location_reader.fieldnames)
+        if not WANT_LOCATION_LIST_FIELDS.issubset(got_location_fields):
             self.session[LOCATION_LIST_ERR] = (
                 'location_list.csv should have the fields %s' % ', '.join(
                         WANT_LOCATION_LIST_FIELDS))
@@ -190,9 +192,6 @@ class PopulateHandler(BaseAdminHandler):
 
         ndb.delete_multi(models.Guest.query().fetch(keys_only=True))
         ndb.delete_multi(models.Location.query().fetch(keys_only=True))
-        if self.request.POST.get('delete') == 'delete':
-            ndb.delete_multi(models.Invitation.query().fetch(keys_only=True))
-            ndb.delete_multi(models.Rsvp.query().fetch(keys_only=True))
 
         for row in guest_reader:
             invitation_code = row.get('invitation_code')
