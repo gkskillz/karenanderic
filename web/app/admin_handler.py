@@ -62,7 +62,6 @@ class EmailHandler(BaseAdminHandler):
     def get(self):
         template = common.JINJA_ENV.get_template('/admin/email.html')
         context = self.base_context()
-        print self.session
         if STATUS_MESSAGE in self.session:
             context['status_message'] = self.session.pop(STATUS_MESSAGE)
         self.response.out.write(template.render(context))
