@@ -224,3 +224,33 @@ class PopulateHandler(BaseAdminHandler):
                 continue
 
         self.redirect('/admin')
+
+
+class ResponsesHandler(BaseAdminHandler):
+    def get(self):
+        ca_rows = []
+        q = models.Invitation.query().order(models.Invitation.code)
+        for invitation in q.fetch():
+            guests = models.Guest.query_invitation(invitation, is_child=False)
+            login = models.LoginAttempt.query_invitation_latest(invitation)
+            rsvp = models.Rsvp.query_invitation_latest(
+                    invitation, location=models.CA_LOCATION)
+            self._add_row(ca_rows, invitation, guests, login, rsvp)
+
+        template = common.JINJA_ENV.get_template('/admin/responses.html')
+        context = self.base_context()
+        context['ca_rows'] = ca_rows
+        self.response.out.write(template.render(context))
+
+    @staticmethod
+    def _add_row(rows, invitation, guests, login, rsvp):
+        row = {
+            'code': invitation.code,
+            'names': ', '.join(g.full_name() for g in guests),
+            'login_timestamp': login and login.timestamp,
+        }
+        if rsvp:
+            row['rsvp_timestamp'] = rsvp.timestamp
+            row['yes_list'] = [g.name for g in rsvp.guest_rsvps if g.is_yes()]
+            row['no_list'] = [g.name for g in rsvp.guest_rsvps if g.is_no()]
+        rows.append(row)

@@ -25,8 +25,8 @@ class Guest(ndb.Model):
             return []
         q = cls.query(ancestor=invitation.key)
         if is_child is not None:
-            q = q.filter(Guest.is_child == is_child)
-        q = q.order(Guest.first_name, Guest.last_name)
+            q = q.filter(cls.is_child == is_child)
+        q = q.order(cls.first_name, cls.last_name)
         return q.fetch()
 
 
@@ -59,6 +59,14 @@ class LoginAttempt(ndb.Model):
     success = ndb.BooleanProperty(default=False)
     method = ndb.StringProperty()
     timestamp = ndb.DateTimeProperty(auto_now_add=True)
+
+    @classmethod
+    def query_invitation_latest(cls, invitation):
+        if not invitation:
+            return None
+        q = cls.query(cls.code == invitation.code)
+        q = q.order(-cls.timestamp)
+        return q.get()
 
 
 # Choices for the RSVP.
@@ -162,3 +170,12 @@ class Rsvp(ndb.Model):
             ))
         rsvp.add_empty_extras(location)
         return rsvp
+
+    @classmethod
+    def query_invitation_latest(cls, invitation, location=None):
+        if not invitation or not location:
+            return None
+        q = cls.query(ancestor=invitation.key)
+        q.filter(cls.location == location)
+        q = q.order(-Rsvp.timestamp)
+        return q.get()

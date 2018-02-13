@@ -23,9 +23,21 @@ indexes:
   - name: first_name
   - name: last_name
 
+- kind: LoginAttempt
+  properties:
+  - name: code
+  - name: timestamp
+    direction: desc
+
 - kind: Rsvp
   ancestor: yes
   properties:
   - name: location
+  - name: timestamp
+    direction: desc
+
+- kind: Rsvp
+  ancestor: yes
+  properties:
   - name: timestamp
     direction: desc

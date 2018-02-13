@@ -1,0 +1,44 @@
+{% extends "common/base.html" %}
+
+{% block navbar %}{% include "common/navbar.html" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col my-3">
+    <h1 class="mb-3">California Responses</h1>
+    <table class="table table-sm">
+      <tr>
+        <th>Code</th>
+        <th>Names</th>
+        <th>Login</th>
+        <th>RSVP</th>
+        <th>Yes</th>
+        <th>No</th>
+      </tr>
+      {% for row in ca_rows %}
+      <tr>
+        <td>{{ row.code }}</td>
+        <td>{{ row.names }}</td>
+        <td>{{ row.login_timestamp|admin_datetime }}</td>
+        <td>{{ row.rsvp_timestamp|admin_datetime }}</td>
+        <td>
+          <ul class="list-unstyled m-0">
+            {% for name in row.yes_list %}
+            <li>{{ name }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td>
+          <ul class="list-unstyled m-0">
+            {% for name in row.no_list %}
+            <li>{{ name }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {{ rows }}
+  </div>
+</div>
+{% endblock %}
