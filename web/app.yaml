@@ -18,6 +18,8 @@ handlers:
 libraries:
 - name: jinja2
   version: "2.6"
+- name: pytz
+  version: "2017.2"
 
 skip_files:
 - ^(.*/)?.*\.pyc$
