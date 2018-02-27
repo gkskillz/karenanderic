@@ -20,7 +20,7 @@ Running the app for local development can be done with the `dev_appserver.py`
 App Engine command. Run:
 
 ```sh
-./dev_appserver.py web
+dev_appserver.py web
 ```
 
 ## Deployment
