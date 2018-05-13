@@ -3,6 +3,7 @@ import pytz
 
 import jinja2
 
+
 def _filename(f):
     """Return the filename relative to `common.py`."""
     return os.path.join(os.path.dirname(__file__), f)
