@@ -46,3 +46,13 @@ h1, h2, h3, h4,
   background: #212121;
   max-height: 720px;
 }
+
+.registry-logo {
+  height: 200px;
+  width: 300px;
+  padding: 32px
+}
+
+.registry-logo:hover {
+  opacity: .6;
+}
