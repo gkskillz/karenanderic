@@ -74,6 +74,7 @@ YES_RSVP = 1
 NO_RSVP = 2
 RSVP_CHOICES = [YES_RSVP, NO_RSVP]
 
+
 # Choices for the meal.
 MEAT_MEAL = 1
 FISH_MEAL = 2
@@ -95,6 +96,18 @@ class GuestRsvp(ndb.Model):
 
     def is_no(self):
         return self.rsvp == NO_RSVP
+
+    def is_meat_meal(self):
+        return self.meal_choice == MEAT_MEAL
+
+    def is_fish_meal(self):
+        return self.meal_choice == FISH_MEAL
+
+    def is_veggie_meal(self):
+        return self.meal_choice == VEGGIE_MEAL
+
+    def is_child_meal(self):
+        return self.meal_choice == CHILD_MEAL
 
 
 class Rsvp(ndb.Model):
@@ -179,3 +192,20 @@ class Rsvp(ndb.Model):
         q.filter(cls.location == location)
         q = q.order(-Rsvp.timestamp)
         return q.get()
+
+
+def bool_to_string(val):
+    return {True: 'yes', False: 'no'}.get(val, '')
+
+
+def rsvp_to_string(rsvp):
+    return {YES_RSVP: 'yes', NO_RSVP: 'no'}.get(rsvp, '')
+
+
+def meal_choice_to_string(choice):
+    return {
+        MEAT_MEAL: 'meat',
+        FISH_MEAL: 'fish',
+        VEGGIE_MEAL: 'veggie',
+        CHILD_MEAL: 'child',
+    }.get(choice, '')

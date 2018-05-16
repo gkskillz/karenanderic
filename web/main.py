@@ -36,6 +36,7 @@ app = webapp2.WSGIApplication(
         ('/admin/email', admin_handler.EmailHandler),
         ('/admin/populate', admin_handler.PopulateHandler),
         ('/admin/responses', admin_handler.ResponsesHandler),
+        ('/admin/responses/csv', admin_handler.ResponsesCsvHandler),
     ],
     config={
         'webapp2_extras.sessions': {

@@ -254,3 +254,49 @@ class ResponsesHandler(BaseAdminHandler):
             row['yes_list'] = [g.name for g in rsvp.guest_rsvps if g.is_yes()]
             row['no_list'] = [g.name for g in rsvp.guest_rsvps if g.is_no()]
         rows.append(row)
+
+
+class ResponsesCsvHandler(BaseAdminHandler):
+    def get(self):
+        rows = []
+        q = models.Invitation.query().order(models.Invitation.code)
+        for invitation in q.fetch():
+            rsvp = models.Rsvp.query_invitation_latest(
+                    invitation, location=models.CA_LOCATION)
+            if rsvp:
+                login = models.LoginAttempt.query_invitation_latest(invitation)
+                for guest_rsvp in rsvp.guest_rsvps:
+                    row = {
+                        'code': invitation.code,
+                        'name': guest_rsvp.name,
+                        'login_timestamp': login and login.timestamp,
+                        'rsvp_timestamp': rsvp.timestamp,
+                        'rsvp': models.rsvp_to_string(guest_rsvp.rsvp),
+                        'is_child': models.bool_to_string(guest_rsvp.is_child),
+                        'is_extra': models.bool_to_string(guest_rsvp.is_extra),
+                        'meal_choice': models.meal_choice_to_string(
+                            guest_rsvp.meal_choice),
+                        'meal_comments': guest_rsvp.meal_comments,
+                        'shuttle_rsvp': models.rsvp_to_string(
+                            rsvp.shuttle_rsvp),
+                        'comments': rsvp.comments,
+                    }
+                    rows.append(row)
+
+        self.response.headers['Content-Type'] = 'application/csv'
+        fieldnames = [
+            'code',
+            'name',
+            'login_timestamp',
+            'rsvp_timestamp',
+            'rsvp',
+            'is_child',
+            'is_extra',
+            'meal_choice',
+            'meal_comments',
+            'shuttle_rsvp',
+            'comments',
+        ]
+        writer = csv.DictWriter(self.response.out, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
