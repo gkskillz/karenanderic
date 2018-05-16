@@ -282,7 +282,7 @@ class ResponsesCsvHandler(BaseAdminHandler):
                         'comments': rsvp.comments,
                     }
                     row = {
-                        k: v.encode('utf-8') for k, v in row.iteritems()
+                        k: v and v.encode('utf-8') for k, v in row.iteritems()
                     }
                     rows.append(row)
 
