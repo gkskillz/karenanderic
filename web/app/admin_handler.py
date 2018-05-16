@@ -272,6 +272,7 @@ class ResponsesCsvHandler(BaseAdminHandler):
                         'login_timestamp': login and str(login.timestamp),
                         'rsvp_timestamp': str(rsvp.timestamp),
                         'rsvp': models.rsvp_to_string(guest_rsvp.rsvp),
+                        'mailing_address': rsvp.mailing_address,
                         'is_child': models.bool_to_string(guest_rsvp.is_child),
                         'is_extra': models.bool_to_string(guest_rsvp.is_extra),
                         'meal_choice': models.meal_choice_to_string(
@@ -287,12 +288,15 @@ class ResponsesCsvHandler(BaseAdminHandler):
                     rows.append(row)
 
         self.response.headers['Content-Type'] = 'application/csv'
+        self.response.headers['Content-Disposition'] = (
+            'attachment; filename="responses.csv"')
         fieldnames = [
             'code',
             'name',
             'login_timestamp',
             'rsvp_timestamp',
             'rsvp',
+            'mailing_address',
             'is_child',
             'is_extra',
             'meal_choice',
