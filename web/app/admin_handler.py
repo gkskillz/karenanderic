@@ -269,8 +269,8 @@ class ResponsesCsvHandler(BaseAdminHandler):
                     row = {
                         'code': invitation.code,
                         'name': guest_rsvp.name,
-                        'login_timestamp': login and login.timestamp,
-                        'rsvp_timestamp': rsvp.timestamp,
+                        'login_timestamp': login and str(login.timestamp),
+                        'rsvp_timestamp': str(rsvp.timestamp),
                         'rsvp': models.rsvp_to_string(guest_rsvp.rsvp),
                         'is_child': models.bool_to_string(guest_rsvp.is_child),
                         'is_extra': models.bool_to_string(guest_rsvp.is_extra),
@@ -280,6 +280,9 @@ class ResponsesCsvHandler(BaseAdminHandler):
                         'shuttle_rsvp': models.rsvp_to_string(
                             rsvp.shuttle_rsvp),
                         'comments': rsvp.comments,
+                    }
+                    row = {
+                        k: v.encode('utf-8') for k, v in row.iteritems()
                     }
                     rows.append(row)
 
