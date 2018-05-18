@@ -37,6 +37,10 @@ h1, h2, h3, h4,
   background-color: #c8e6c9;
 }
 
+.light-red {
+  background-color: #ffcdd2;
+}
+
 .album {
   max-width: 840px;
   text-align: center;

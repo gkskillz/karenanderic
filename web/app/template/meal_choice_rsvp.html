@@ -1,0 +1,45 @@
+{% set key = "%s_meal_choice" % id_prefix %}
+<div>
+  {% if not guest_rsvp.is_child %}
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio"
+           id="{{ id_prefix }}_meat" name="{{ key }}" value="meat"
+           {% if guest_rsvp.is_meat_meal() %}checked{% endif %}/>
+    <label class="form-check-label" for="{{ id_prefix }}_meat">
+      Tri-tip Steak
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio"
+           id="{{ id_prefix }}_fish" name="{{ key }}" value="fish"
+           {% if guest_rsvp.is_fish_meal() %}checked{% endif %}/>
+    <label class="form-check-label" for="{{ id_prefix }}_fish">
+      Seared Scallops
+    </label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio"
+           id="{{ id_prefix }}_veggie" name="{{ key }}" value="veggie"
+           {% if guest_rsvp.is_veggie_meal() %}checked{% endif %}/>
+    <label class="form-check-label" for="{{ id_prefix }}_veggie">
+      Cheese Ravioli
+    </label>
+  </div>
+  {% else %}
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox"
+           id="{{ id_prefix }}_none" name="{{ key }}" value="none"
+           {% if guest_rsvp.is_no_meal() %}checked{% endif %}/>
+    <label class="form-check-label" for="{{ id_prefix }}_none">
+      No meal
+    </label>
+  </div>
+  {% endif %}
+</div>
+<div>
+  <input type="text" class="form-control"
+         id="{{ id_prefix }}_meal_comments"
+         name="{{ id_prefix }}_meal_comments"
+         placeholder="Any dietary restrictions?"
+         value="{{ guest_rsvp.meal_comments or '' }}"/>
+</div>

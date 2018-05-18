@@ -80,7 +80,8 @@ MEAT_MEAL = 1
 FISH_MEAL = 2
 VEGGIE_MEAL = 3
 CHILD_MEAL = 4
-MEAL_CHOICES = [MEAT_MEAL, FISH_MEAL, VEGGIE_MEAL, CHILD_MEAL]
+NO_MEAL = 5
+MEAL_CHOICES = [MEAT_MEAL, FISH_MEAL, VEGGIE_MEAL, CHILD_MEAL, NO_MEAL]
 
 
 class GuestRsvp(ndb.Model):
@@ -106,8 +107,8 @@ class GuestRsvp(ndb.Model):
     def is_veggie_meal(self):
         return self.meal_choice == VEGGIE_MEAL
 
-    def is_child_meal(self):
-        return self.meal_choice == CHILD_MEAL
+    def is_no_meal(self):
+        return self.meal_choice == NO_MEAL
 
 
 class Rsvp(ndb.Model):
@@ -145,12 +146,23 @@ class Rsvp(ndb.Model):
                 rsvps.append(rsvp)
         return rsvps
 
+    def completed(self):
+        for rsvp in self.guest_rsvps:
+            if rsvp.rsvp == NO_RSVP:
+                continue
+            if rsvp.is_extra and not rsvp.name:
+                continue
+            if rsvp.meal_choice is None:
+                return False
+        return True
+
     def add_empty_extras(self, location):
         if not self.plus_one_rsvp() and location.has_plus_one:
             self.guest_rsvps.append(GuestRsvp(
                 name='',
                 is_child=False,
                 is_extra=True,
+                meal_comments='',
             ))
 
         additional_child_count = (
@@ -161,6 +173,8 @@ class Rsvp(ndb.Model):
                 name='',
                 is_child=True,
                 is_extra=True,
+                meal_choice=CHILD_MEAL,
+                meal_comments='',
             ))
 
     def is_shuttle_yes(self):
@@ -180,6 +194,8 @@ class Rsvp(ndb.Model):
                 name=guest.full_name(),
                 is_child=guest.is_child,
                 is_extra=False,
+                meal_choice=guest.is_child and CHILD_MEAL or None,
+                meal_comments='',
             ))
         rsvp.add_empty_extras(location)
         return rsvp

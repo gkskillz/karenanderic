@@ -1,11 +1,17 @@
-<input type="hidden" name="{{ prefix }}_name" value="{{ guest_rsvp.name }}" />
-{% set question = guest_rsvp.name %}
-{% set id_prefix = prefix %}
-{% set key = "%s_rsvp" % id_prefix %}
-{% set yes_label = "Accept with pleasure!" %}
-{% set no_label = "Decline with regret" %}
-{% set yes_checked = guest_rsvp.is_yes() %}
-{% set no_checked = guest_rsvp.is_no() %}
-{% set required = True %}
-{% include "yes_no_rsvp.html" %}
+<div class="my-3">
+  <input type="hidden" name="{{ prefix }}_name" value="{{ guest_rsvp.name }}" />
+  {% set question = guest_rsvp.name %}
+  {% set id_prefix = prefix %}
+  {% set key = "%s_rsvp" % id_prefix %}
+  {% set yes_label = "Accept with pleasure!" %}
+  {% set no_label = "Decline with regret" %}
+  {% set yes_checked = guest_rsvp.is_yes() %}
+  {% set no_checked = guest_rsvp.is_no() %}
+  {% set required = True %}
+  {% include "yes_no_rsvp.html" %}
 
+  <div id="{{ prefix }}_meal_choice" style="display: hidden;">
+    {% set id_prefix = prefix %}
+    {% include "meal_choice_rsvp.html" %}
+  </div>
+</div>
