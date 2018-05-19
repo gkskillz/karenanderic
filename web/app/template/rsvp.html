@@ -67,9 +67,13 @@
       {% if guest_rsvp %}
         <div class="my-3">
           <label class="font-weight-bold" for="plus_one_name">Will a plus one be attending?</label>
-          <input class="form-control mb-1" type="text" id="plus_one_name" name="plus_one_name" value="{{ guest_rsvp.name }}" placeholder="Name" />
+          <input class="form-control mb-1" type="text"
+                 id="plus_one_name" name="plus_one_name"
+                 value="{{ guest_rsvp.name }}" placeholder="Name" />
           {% set id_prefix = "plus_one" %}
-          {% include "meal_choice_rsvp.html" %}
+          <div id="{{ id_prefix }}_meal_choice" class="meal_choice">
+            {% include "meal_choice_rsvp.html" %}
+          </div>
         </div>
       {% endif %}
 
@@ -85,8 +89,12 @@
           {% for guest_rsvp in ca_rsvp.additional_child_rsvps() %}
             <div class="my-3">
               {% set id_prefix = "additional_child_%d" % loop.index %}
-              <input class="form-control mb-1" type="text" name="{{ id_prefix }}_name" value="{{ guest_rsvp.name }}" placeholder="Name" />
-              {% include "meal_choice_rsvp.html" %}
+              <input class="form-control mb-1" type="text"
+                     id="{{ id_prefix }}_name" name="{{ id_prefix }}_name"
+                     value="{{ guest_rsvp.name }}" placeholder="Name" />
+              <div id="{{ id_prefix }}_meal_choice" class="meal_choice">
+                {% include "meal_choice_rsvp.html" %}
+              </div>
             </div>
           {% endfor %}
         </div>
@@ -106,18 +114,52 @@
 <script>
 (function() {
   'use strict';
-  window.addEventListener('load', function() {
-    var forms = document.getElementsByClassName('needs-validation');
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
+
+  $(document).ready(function () {
+    $('.needs-validation').submit(function(event) {
+      if (this.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      this.classList.add('was-validated');
     });
-  }, false);
+
+    var rsvp_regex = RegExp('((?:adult|child)_\\d+)_(?:yes|no)');
+    var rsvp_inputs = $('input').filter(function() {
+      return rsvp_regex.test(this.id);
+    });
+
+    // Show meal choices if the answer is not yes
+    $.map(rsvp_inputs, function(input) {
+      if (input.checked && input.value === 'yes') {
+        $('#' + input.id.match(rsvp_regex)[1] + '_meal_choice').show();
+      }
+    });
+
+    // Set up listeners to hide or show meal choices on RSVP changes
+    rsvp_inputs.change(function() {
+      var e = $('#' + this.id.match(rsvp_regex)[1] + '_meal_choice');
+      this.value === 'yes' ? e.show() : e.hide();
+    });
+
+    var plus_regex = RegExp('(additional_child_\\d+|plus_one)_name');
+    var plus_inputs = $('input').filter(function() {
+      return plus_regex.test(this.id);
+    });
+
+    // Show meal choices if the name is not blank
+    $.map(plus_inputs, function(input) {
+      if (input.value.length === 0) {
+        $('#' + input.id.match(plus_regex)[1] + '_meal_choice').hide();
+      }
+    });
+
+    // Set up listeners to hide or show meal choices on name changes
+    plus_inputs.on('keyup blur change', function() {
+      var e = $('#' + this.id.match(plus_regex)[1] + '_meal_choice');
+      this.value.length !== 0 ? e.show() : e.hide();
+    });
+  });
 })();
 </script>
 {% endblock %}

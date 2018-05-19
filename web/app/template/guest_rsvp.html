@@ -10,7 +10,7 @@
   {% set required = True %}
   {% include "yes_no_rsvp.html" %}
 
-  <div id="{{ prefix }}_meal_choice" style="display: hidden;">
+  <div id="{{ prefix }}_meal_choice" class="meal_choice">
     {% set id_prefix = prefix %}
     {% include "meal_choice_rsvp.html" %}
   </div>
