@@ -120,6 +120,14 @@ class RsvpHandler(base_handler.BaseHandler):
                 return models.VEGGIE_MEAL
             return None
         else:
+            if value == 'meat':
+                return models.MEAT_MEAL
+            if value == 'fish':
+                return models.FISH_MEAL
+            if value == 'veggie':
+                return models.VEGGIE_MEAL
+            if value == 'child':
+                return models.CHILD_MEAL
             if value == 'none':
                 return models.NO_MEAL
-            return models.CHILD_MEAL
+            return None

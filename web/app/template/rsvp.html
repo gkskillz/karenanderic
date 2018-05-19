@@ -124,12 +124,16 @@
       this.classList.add('was-validated');
     });
 
-    var rsvp_regex = RegExp('((?:adult|child)_\\d+)_(?:yes|no)');
+    var rsvp_regex = RegExp('^((?:adult|child)_\\d+)_(?:yes|no)$');
     var rsvp_inputs = $('input').filter(function() {
       return rsvp_regex.test(this.id);
     });
 
-    // Show meal choices if the answer is not yes
+    // Hide all the meal choices. They're shown by default so clients with
+    // disabled Javascript can still see options.
+    $('div.meal_choice').hide();
+
+    // Show meal choices if the answer is yes
     $.map(rsvp_inputs, function(input) {
       if (input.checked && input.value === 'yes') {
         $('#' + input.id.match(rsvp_regex)[1] + '_meal_choice').show();
@@ -138,19 +142,20 @@
 
     // Set up listeners to hide or show meal choices on RSVP changes
     rsvp_inputs.change(function() {
+      console.log(this);
       var e = $('#' + this.id.match(rsvp_regex)[1] + '_meal_choice');
       this.value === 'yes' ? e.show() : e.hide();
     });
 
-    var plus_regex = RegExp('(additional_child_\\d+|plus_one)_name');
+    var plus_regex = RegExp('^(additional_child_\\d+|plus_one)_name$');
     var plus_inputs = $('input').filter(function() {
       return plus_regex.test(this.id);
     });
 
     // Show meal choices if the name is not blank
     $.map(plus_inputs, function(input) {
-      if (input.value.length === 0) {
-        $('#' + input.id.match(plus_regex)[1] + '_meal_choice').hide();
+      if (input.value.length !== 0) {
+        $('#' + input.id.match(plus_regex)[1] + '_meal_choice').show();
       }
     });
 

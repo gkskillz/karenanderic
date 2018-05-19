@@ -107,6 +107,9 @@ class GuestRsvp(ndb.Model):
     def is_veggie_meal(self):
         return self.meal_choice == VEGGIE_MEAL
 
+    def is_child_meal(self):
+        return self.meal_choice == CHILD_MEAL
+
     def is_no_meal(self):
         return self.meal_choice == NO_MEAL
 
@@ -173,7 +176,6 @@ class Rsvp(ndb.Model):
                 name='',
                 is_child=True,
                 is_extra=True,
-                meal_choice=CHILD_MEAL,
                 meal_comments='',
             ))
 
@@ -194,7 +196,6 @@ class Rsvp(ndb.Model):
                 name=guest.full_name(),
                 is_child=guest.is_child,
                 is_extra=False,
-                meal_choice=guest.is_child and CHILD_MEAL or None,
                 meal_comments='',
             ))
         rsvp.add_empty_extras(location)
@@ -224,4 +225,5 @@ def meal_choice_to_string(choice):
         FISH_MEAL: 'fish',
         VEGGIE_MEAL: 'veggie',
         CHILD_MEAL: 'child',
+        NO_MEAL: 'none',
     }.get(choice, '')
