@@ -17,7 +17,8 @@ h1, h2, h3, h4,
 
 .banner.home {
   background-image: url('/static/images/home_banner.jpg');
-  height: 600px;
+  background-position: 61% center;
+  height: 720px;
 }
 
 .banner.event {
