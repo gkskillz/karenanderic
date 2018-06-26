@@ -2,7 +2,7 @@
 <div>
   {% if guest_rsvp.is_child %}
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio"
+    <input class="form-check-input" type="radio" disabled
            id="{{ id_prefix }}_child" name="{{ key }}" value="child"
            {% if guest_rsvp.is_child_meal() %}checked{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_child">
@@ -11,7 +11,7 @@
   </div>
   {% endif %}
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio"
+    <input class="form-check-input" type="radio" disabled
            id="{{ id_prefix }}_meat" name="{{ key }}" value="meat"
            {% if guest_rsvp.is_meat_meal() %}checked{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_meat">
@@ -19,7 +19,7 @@
     </label>
   </div>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio"
+    <input class="form-check-input" type="radio" disabled
            id="{{ id_prefix }}_fish" name="{{ key }}" value="fish"
            {% if guest_rsvp.is_fish_meal() %}checked{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_fish">
@@ -27,7 +27,7 @@
     </label>
   </div>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio"
+    <input class="form-check-input" type="radio" disabled
            id="{{ id_prefix }}_veggie" name="{{ key }}" value="veggie"
            {% if guest_rsvp.is_veggie_meal() %}checked{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_veggie">
@@ -36,7 +36,7 @@
   </div>
   {% if guest_rsvp.is_child %}
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio"
+    <input class="form-check-input" type="radio" disabled
            id="{{ id_prefix }}_none" name="{{ key }}" value="none"
            {% if guest_rsvp.is_no_meal() %}checked{% endif %}/>
     <label class="form-check-label" for="{{ id_prefix }}_none">
@@ -46,7 +46,7 @@
   {% endif %}
 </div>
 <div>
-  <input type="text" class="form-control"
+  <input type="text" class="form-control" readonly
          id="{{ id_prefix }}_meal_comments"
          name="{{ id_prefix }}_meal_comments"
          placeholder="Any dietary restrictions?"

@@ -9,39 +9,27 @@
   </div>
 </div>
 {% if ca_rsvp %}
-{% if ca_rsvp.timestamp %}
 <div class="row">
   <div class="col-lg-8 mt-4">
-    {% if ca_rsvp.completed() %}
     <div class="card light-green">
       <div class="card-body">
         <p class="card-text">
-          Thank you for your response! If you need to make any changes, please
-          resubmit the form.
+          Thank you for your response! We have closed the submission form.
+          Please email
+          <a href="mailto:karenandericrowe@gmail.com">karenandericrowe@gmail.com</a>
+          if you need to make any changes.
         </p>
       </div>
     </div>
-    {% else %}
-    <div class="card light-red">
-      <div class="card-body">
-        <p class="card-text">
-          Thank you for your previous response! Please select your meal from
-          the choices below.
-        </p>
-      </div>
-    </div>
-    {% endif %}
   </div>
 </div>
-{% endif %}
 <div class="row">
   <div class="col-lg-8 my-4">
-    <form class="needs-validation" novalidate action="/rsvp" method="post">
+    <form class="needs-validation" novalidate>
       <input type="hidden" name="location" value="ca" />
       <div class="mb-3">
         <p>
-          Please let us know by June 15th if you can attend our wedding at
-          5:00 PM, August 4th, 2018. We will offer the following menu options:
+          We will offer the following menu options:
         </p>
         <ul>
           <li>
@@ -67,7 +55,7 @@
       {% if guest_rsvp %}
         <div class="my-3">
           <label class="font-weight-bold" for="plus_one_name">Will a plus one be attending?</label>
-          <input class="form-control mb-1" type="text"
+          <input class="form-control mb-1" type="text" readonly
                  id="plus_one_name" name="plus_one_name"
                  value="{{ guest_rsvp.name }}" placeholder="Name" />
           {% set id_prefix = "plus_one" %}
@@ -89,7 +77,7 @@
           {% for guest_rsvp in ca_rsvp.additional_child_rsvps() %}
             <div class="my-3">
               {% set id_prefix = "additional_child_%d" % loop.index %}
-              <input class="form-control mb-1" type="text"
+              <input class="form-control mb-1" type="text" readonly
                      id="{{ id_prefix }}_name" name="{{ id_prefix }}_name"
                      value="{{ guest_rsvp.name }}" placeholder="Name" />
               <div id="{{ id_prefix }}_meal_choice" class="meal_choice">
@@ -101,11 +89,13 @@
       {% endif %}
 
       <div class="mb-3">
-        <label class="font-weight-bold" for="comments">Any additional comments?</label>
-        <textarea class="form-control" id="comments" name="comments" rows="3" placeholder="Comments">{{ ca_rsvp.comments }}</textarea>
+        <label class="font-weight-bold" for="comments">
+          Any additional comments?
+        </label>
+        <textarea class="form-control" readonly
+                  id="comments" name="comments" rows="3"
+                  placeholder="Comments">{{ ca_rsvp.comments }}</textarea>
       </div>
-
-      <button class="btn btn-primary" type="submit">Submit</button>
     </form>
   </div>
 </div>
